@@ -9,6 +9,7 @@ class PictureVariant extends Model
 {
     protected $fillable = [
         'url',
+        'resolution',
         'picture_id'
     ];
 

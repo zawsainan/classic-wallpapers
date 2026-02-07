@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('picture_variants', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Picture::class)->constrained()->cascadeOnDelete();
+            $table->string('resolution');
             $table->string('url');
             $table->timestamps();
         });

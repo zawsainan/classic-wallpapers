@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Pictures\Schemas;
 
 use App\Enums\PictureType;
+use App\Models\Category;
 use App\Models\Tag;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
@@ -24,10 +25,12 @@ class PictureForm
                     ->options(collect(PictureType::cases())->mapWithKeys(fn($case) => [$case->value => $case->label()])->toArray())
                     ->reactive()
                     ->required(),
+                Select::make('category_id')
+                    ->relationship('category')
+                    ->options(Category::pluck('name', 'id')->toArray()),
                 Select::make('tags')
                     ->relationship('tags', 'name')
                     ->multiple()
-                    ->columnSpan(2)
                     ->preload()
                     ->suffixActions([
                         Action::make('select_all')

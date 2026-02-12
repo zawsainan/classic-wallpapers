@@ -10,6 +10,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -36,6 +37,7 @@ class TagResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->checkIfRecordIsSelectableUsing(fn($record) => !$record->pictures()->exists())
             ->recordTitleAttribute('name')
             ->columns([
                 TextColumn::make('name')
@@ -47,7 +49,17 @@ class TagResource extends Resource
             ])
             ->recordActions([
                 EditAction::make()->successNotificationTitle('Tag updated successfully.'),
-                DeleteAction::make(),
+                DeleteAction::make()->before(function ($action, $record) {
+                    if ($record->pictures()->exists()) {
+                        Notification::make()
+                            ->danger()
+                            ->title('Deletion Blocked')
+                            ->body('This tag has related pictures and cannot be deleted.')
+                            ->send();
+                        $action->cancel();
+                    }
+                })
+                    ->successNotificationTitle('Tag deleted successfully.'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

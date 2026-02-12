@@ -18,7 +18,8 @@ class Picture extends Model
     protected $fillable = [
         'url',
         'type',
-        'name'
+        'name',
+        'category_id'
     ];
 
     protected $casts = [

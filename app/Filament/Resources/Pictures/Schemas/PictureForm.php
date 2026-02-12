@@ -6,6 +6,7 @@ use App\Enums\PictureType;
 use App\Models\Tag;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -20,7 +21,8 @@ class PictureForm
                 TextInput::make('name')
                     ->required(),
                 Select::make('type')
-                    ->options(PictureType::class)
+                    ->options(collect(PictureType::cases())->mapWithKeys(fn($case) => [$case->value => $case->label()])->toArray())
+                    ->reactive()
                     ->required(),
                 Select::make('tags')
                     ->relationship('tags', 'name')
@@ -42,6 +44,7 @@ class PictureForm
                             })
                     ]),
                 FileUpload::make('url')
+                    ->required()
                     ->columnSpanFull()
                     ->label('Picture')
                     ->disk('public')
@@ -49,7 +52,27 @@ class PictureForm
                     ->directory('pictures')
                     ->image()
                     ->imageEditor()
-                    ->getUploadedFileNameForStorageUsing(fn(TemporaryUploadedFile $file) => $file->getClientOriginalName())
+                    ->getUploadedFileNameForStorageUsing(fn(TemporaryUploadedFile $file) => $file->getClientOriginalName()),
+                Repeater::make('Variants')
+                    ->relationship('variants')
+                    ->visible(fn($get) => $get('type') == PictureType::WALLPAPER)
+                    ->schema([
+                        TextInput::make('resolution'),
+                        FileUpload::make('url')
+                            ->required()
+                            ->columnSpanFull()
+                            ->label('Picture')
+                            ->disk('public')
+                            ->acceptedFileTypes(['image/jpg', 'image/png', 'image/webp'])
+                            ->directory('pictures')
+                            ->image()
+                            ->imageEditor()
+                            ->getUploadedFileNameForStorageUsing(fn(TemporaryUploadedFile $file) => $file->getClientOriginalName())
+                    ])
+                    ->defaultItems(1)
+                    ->addActionLabel('Add Variant')
+                    ->columns(4)
+                    ->columnSpanFull()
             ])
             ->columns(4);
     }

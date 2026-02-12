@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PictureType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,7 +12,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Picture extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasUlids;
+    protected $keyType = 'string';
+    public $incrementing = false;
     protected $fillable = [
         'url',
         'type',

@@ -15,22 +15,11 @@ class PicturesTable
     {
         return $table
             ->columns([
-                TextColumn::make('url')
+                TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('type')
-                    ->searchable(),
-                TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->formatStateUsing(fn($state) => $state->label())
+                    ->sortable(),
             ])
             ->filters([
                 //

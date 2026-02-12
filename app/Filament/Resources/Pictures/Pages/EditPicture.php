@@ -18,4 +18,14 @@ class EditPicture extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    public function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    protected function getSavedNotificationTitle(): ?string
+    {
+        return "Picture updated successfully.";
+    }
 }

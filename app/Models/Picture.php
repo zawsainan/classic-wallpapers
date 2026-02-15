@@ -47,4 +47,9 @@ class Picture extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function likedPictures(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'liked_pictures')->withTimestamps();
+    }
 }

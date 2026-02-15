@@ -58,7 +58,7 @@ class PictureForm
                     ->getUploadedFileNameForStorageUsing(fn(TemporaryUploadedFile $file) => $file->getClientOriginalName()),
                 Repeater::make('Variants')
                     ->relationship('variants')
-                    ->visible(fn($get) => $get('type') == PictureType::WALLPAPER)
+                    ->visible(fn($get) => $get('type') == 'wallpaper')
                     ->schema([
                         TextInput::make('resolution'),
                         FileUpload::make('url')

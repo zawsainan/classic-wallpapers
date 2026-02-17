@@ -90,4 +90,12 @@ class ApiController extends Controller
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Logged out successfully']);
     }
+
+    public function show(Picture $picture)
+    {
+        $picture->load('variants');
+        return response()->json([
+            'picture' => $picture
+        ]);
+    }
 }

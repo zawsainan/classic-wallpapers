@@ -12,4 +12,6 @@ Route::get('categories', [ApiController::class, 'categories']);
 Route::post('register', [ApiController::class, 'register']);
 Route::post('login', [ApiController::class, 'login']);
 
+Route::post('logout', [ApiController::class, 'logout'])->middleware('auth:sanctum');;
+
 Route::get('pictures/{picture}', [ApiController::class, 'show']);

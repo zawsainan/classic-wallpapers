@@ -77,7 +77,7 @@ class ApiController extends Controller
         }
         $user = $request->user();
         $user->tokens()->delete();
-        $token = $user->createToken('auth_token')->plainTokenText;
+        $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
             'message' => 'Logged in successfully',
             'user' => $user,
